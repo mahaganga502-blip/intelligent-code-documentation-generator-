@@ -1,0 +1,50 @@
+import ast
+code = '''
+def add(a, b):
+    """Add two numbers."""
+    return a + b
+def multiply(a, b):
+    """Multiply two numbers."""
+    return a * b
+class Calculator:
+    """A simple calculator class."""
+    pass
+'''
+tree = ast.parse(code)
+docs = ["# Code Documentation\n"]
+for item in tree.body:
+    if isinstance(item, ast.FunctionDef):
+        args = [arg.arg for arg in item.args.args]
+        description = (
+            ast.get_docstring(item)
+            or "No description available."
+        )
+        docs.append(f"## Function: {item.name}")
+        docs.append(f"Parameters: {', '.join(args)}")
+        docs.append(f"Description: {description}\n")
+    elif isinstance(item, ast.ClassDef):
+        description = (
+            ast.get_docstring(item)
+            or "No description available."
+        )
+        docs.append(f"## Class: {item.name}")
+        docs.append(f"Description: {description}\n")
+print("Documentation generated successfully!\n")
+print("\n".join(docs))
+
+OUTPUT:
+Documentation generated successfully!
+
+# Code Documentation
+
+## Function: add
+Parameters: a, b
+Description: Add two numbers.
+
+## Function: multiply
+Parameters: a, b
+Description: Multiply two numbers.
+
+## Class: Calculator
+Description: A simple calculator class.
+
